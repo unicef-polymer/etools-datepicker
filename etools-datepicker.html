@@ -1,0 +1,150 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../iron-icons/iron-icons.html">
+
+<link rel="import" href="../paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../paper-date-picker/paper-date-picker-dialog-style.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../moment-element/moment-with-locales-import.html">
+
+
+
+<!--
+`etools-datepicker`
+
+Polymer datepicker element.
+
+### Styling
+
+The button that opens the calendar is just an iron-icon. You can use iron-icon style variables and mixins to style your
+datepicker button.
+
+You can use defined variables and mixins to change element style.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--etools-datepicker-primary-color` | Date picker primary color | `#333333`
+`--etools-datepicker-secondary-color` | Date picker primary color | `#737373`
+`--etools-datepicker-heading-bg-color` | Heading background color | `#4a90e2`
+`--etools-datepicker-heading-date-color` | Heading date color | `#ffffff`
+`--etools-datepicker-heading-year-color` | Heading year color | `#c5cae9`
+`--etools-datepicker-calendar-bg-color` | Calendar background color | `#ffffff`
+`--etools-datepicker-disabled-color` | Disabled color | `#d1d1d1`
+`--etools-datepicker-btns-text-color` | Calendar dialog buttons text color  | `#d1d1d1`
+`--etools-datepicker-btn` | Calendar dialog buttons mixin  | `{}`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="etools-datepicker">
+  <template>
+    <style is="custom-style" include="paper-date-picker-dialog-style">
+      :host {
+        --primary-text-color: var(--etools-datepicker-primary-color, #333333);
+        --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
+
+        --default-primary-color: var(--etools-datepicker-heading-bg-color, #4a90e2);
+        --text-primary-color: var(--etools-datepicker-heading-date-color, #ffffff);
+        --light-primary-color: var(--etools-datepicker-heading-year-color, #c5cae9);
+
+        --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
+
+        --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
+      }
+      .buttons paper-button {
+        color: var(--etools-datepicker-btns-text-color, #4a90e2);
+        @apply(--etools-datepicker-btn);
+      }
+      .pick-date {
+        cursor: pointer;
+      }
+      .pick-date[disabled] {
+        color: var(--etools-datepicker-disabled-color, #d1d1d1);
+        cursor: not-allowed;
+      }
+    </style>
+    <iron-icon class="pick-date" disabled$="[[isDisabled]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
+
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+      <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>OK</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'etools-datepicker',
+
+        properties: {
+          prettyDate: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          jsonDate: {
+            type: String,
+            value: null,
+            notify: true
+          },
+          format: {
+            type: String,
+            value: 'LL'
+          },
+          open: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            observer: '_openDatePicker'
+          },
+          isDisabled: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          }
+        },
+        ready: function () {
+          this.date = new Date();
+          this._updateDate();
+        },
+        _updateDate: function () {
+          if (!this.date) {
+            return;
+          }
+          this.prettyDate = this._dateFormat(this.date, this.format);
+          this.jsonDate = this._dateFormat(this.date, '');
+        },
+        _dateFormat: function (date, format) {
+          return moment(date).format(format);
+        },
+        showDialog: function () {
+          if (this.isDisabled) {
+            return false;
+          }
+          this.$.dialog.toggle();
+        },
+        dismissDialog: function (event) {
+          if (event.detail.confirmed) {
+            this.date = this.$.picker.date;
+            this._updateDate();
+          }
+          event.stopPropagation();
+        },
+        _openDatePicker: function (openDatePicker) {
+          if (openDatePicker === true) {
+            this.$.dialog.open();
+            this.open = false;
+          }
+        }
+
+      });
+    })();
+  </script>
+</dom-module>

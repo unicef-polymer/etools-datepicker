@@ -1,0 +1,31 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="min-max-date-demo-data">
+  <script>
+    (function() {
+      // jscs:disable
+      'use strict';
+
+      Polymer({
+        is: 'min-max-date-demo-data',
+        properties: {
+          minDate: {
+            type: Date,
+            value: null,
+            notify: true
+          },
+          maxDate: {
+            type: Date,
+            value: null,
+            notify: true
+          }
+        },
+        ready: function() {
+          this.minDate = new Date(); // current date
+          this.maxDate = new Date(+new Date + 12096e5); // current date + 14 days
+        }
+      });
+
+    })();
+  </script>
+</dom-module>

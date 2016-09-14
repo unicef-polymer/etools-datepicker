@@ -1,0 +1,20 @@
+{
+  "name": "etools-datepicker",
+  "description": "Polymer datepicker element",
+  "version": 1.0,
+  "license": "https://github.com/unicef-polymer/etools-datepicker/blob/master/LICENSE.md",
+  "main": "etools-datepicker.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "paper-date-picker": "polymer-paper-date-picker#^1.2.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.13",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}
