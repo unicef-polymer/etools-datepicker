@@ -42,6 +42,7 @@ Custom property | Description | Default
   <template>
     <style is="custom-style" include="paper-date-picker-dialog-style">
       :host {
+        display: inline-block;
         --primary-text-color: var(--etools-datepicker-primary-color, #333333);
         --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
 
@@ -52,6 +53,12 @@ Custom property | Description | Default
         --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
 
         --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .buttons {
+        background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
       }
       .buttons paper-button {
         color: var(--etools-datepicker-btns-text-color, #4a90e2);
@@ -64,8 +71,15 @@ Custom property | Description | Default
         color: var(--etools-datepicker-disabled-color, #d1d1d1);
         cursor: not-allowed;
       }
+      paper-date-picker {
+        --paper-date-picker-heading: {
+          z-index: 1;
+          margin-bottom: -56px;
+        }
+      }
     </style>
-    <iron-icon class="pick-date" disabled$="[[isDisabled]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
+
+    <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
@@ -108,11 +122,19 @@ Custom property | Description | Default
             type: Boolean,
             value: false,
             reflectToAttribute: true
+          },
+          dynamicallyCreated: {
+            type: Boolean,
+            value: false
           }
         },
         ready: function () {
-          this.date = new Date();
-          this._updateDate();
+          setTimeout(function() {
+            if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
+              this.date = new Date();
+            }
+            this._updateDate();
+          }.bind(this), 0);
         },
         _updateDate: function () {
           if (!this.date) {
@@ -120,6 +142,7 @@ Custom property | Description | Default
           }
           this.prettyDate = this._dateFormat(this.date, this.format);
           this.jsonDate = this._dateFormat(this.date, '');
+          this.fire('date-selected', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
         },
         _dateFormat: function (date, format) {
           return moment(date).format(format);
