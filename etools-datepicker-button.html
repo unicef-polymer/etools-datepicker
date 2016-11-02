@@ -129,6 +129,7 @@ Custom property | Description | Default
           this.datePicker.addEventListener('date-selected', function(event) {
             this.prettyDate = event.detail.prettyDate;
             this.jsonDate = event.detail.jsonDate;
+            this.open = false;
           }.bind(this));
 
           Polymer.dom(document.querySelector('body')).appendChild(this.datePicker);
