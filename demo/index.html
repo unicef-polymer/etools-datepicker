@@ -88,6 +88,17 @@
         </template>
       </demo-snippet>
 
+      <p>Datepickers with no date initialization after element stamp</p>
+      <demo-snippet>
+        <template is="dom-bind">
+          <etools-datepicker-button pretty-date="{{prettyD1}}" format="DD/MM/YYYY" no-init></etools-datepicker-button>
+          <span class="selected-date">Selected date: [[prettyD1]]</span>
+          <br>
+          <etools-datepicker pretty-date="{{prettyD2}}" format="DD/MM/YYYY" no-init></etools-datepicker>
+          <span class="selected-date">Selected date: [[prettyD2]]</span>
+        </template>
+      </demo-snippet>
+
 
     </div>
 

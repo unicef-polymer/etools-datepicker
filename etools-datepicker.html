@@ -126,6 +126,10 @@ Custom property | Description | Default
           dynamicallyCreated: {
             type: Boolean,
             value: false
+          },
+          noInit: {
+            type: Boolean,
+            value: false
           }
         },
         ready: function () {
@@ -133,7 +137,9 @@ Custom property | Description | Default
             if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
               this.date = new Date();
             }
-            this._updateDate();
+            if (!this.noInit) {
+              this._updateDate();
+            }
           }.bind(this), 0);
         },
         _updateDate: function () {
