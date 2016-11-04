@@ -79,6 +79,10 @@ Custom property | Description | Default
             type: Boolean,
             value: false,
             reflectToAttribute: true
+          },
+          noInit: {
+            type: Boolean,
+            value: false
           }
         },
 
@@ -115,6 +119,7 @@ Custom property | Description | Default
           this.datePicker.open = this.open;
           this.datePicker.isDisabled = this.isDisabled;
           this.datePicker.dynamicallyCreated = true;
+          this.datePicker.noInit = this.noInit;
 
           if (this.date) {
             this.datePicker.date = this.date;
