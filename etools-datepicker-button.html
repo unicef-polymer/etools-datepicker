@@ -60,6 +60,11 @@ Custom property | Description | Default
             value: null,
             notify: true
           },
+          date: {
+            type: Date,
+            notify: true,
+            observer: '_dateChanged'
+          },
           jsonDate: {
             type: String,
             value: null,
@@ -93,6 +98,14 @@ Custom property | Description | Default
         detached: function() {
           if (this.datePicker) {
             Polymer.dom(document.querySelector('body')).removeChild(this.datePicker);
+          }
+        },
+
+        _dateChanged: function (date) {
+          if (date && this.datePicker) {
+            var dt = new Date(date);
+            this.datePicker.date = dt;
+            this.datePicker._updateDate();
           }
         },
 
