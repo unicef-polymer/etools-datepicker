@@ -20,7 +20,7 @@ It also contains a button element (etools-datepicker-button) that creates and ap
   format="DD/MM/YYYY" no-init></etools-datepicker-button>
 ```
 
-You can combine the element attributes as you need.
+You can combine the element properties as you need.
 Available properties:
 * prettyDate: String, selected date with format applied
 * jsonDate: String, JSON date format
