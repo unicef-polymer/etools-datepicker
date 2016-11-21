@@ -57,7 +57,7 @@ Custom property | Description | Default
         properties: {
           prettyDate: {
             type: String,
-            value: null,
+            value: '',
             notify: true
           },
           date: {
@@ -67,7 +67,7 @@ Custom property | Description | Default
           },
           jsonDate: {
             type: String,
-            value: null,
+            value: '',
             notify: true
           },
           format: {
@@ -86,6 +86,10 @@ Custom property | Description | Default
             reflectToAttribute: true
           },
           noInit: {
+            type: Boolean,
+            value: false
+          },
+          showClearBtn: {
             type: Boolean,
             value: false
           }
@@ -120,7 +124,7 @@ Custom property | Description | Default
 
         _openDatePicker: function (openDatePicker) {
           if (openDatePicker === true) {
-             this._showdatePicker();
+            this._showdatePicker();
           }
         },
 
@@ -133,6 +137,7 @@ Custom property | Description | Default
           this.datePicker.isDisabled = this.isDisabled;
           this.datePicker.dynamicallyCreated = true;
           this.datePicker.noInit = this.noInit;
+          this.datePicker.showClearBtn = this.showClearBtn;
 
           if (this.date) {
             this.datePicker.date = this.date;
@@ -145,13 +150,21 @@ Custom property | Description | Default
           }
 
           this.datePicker.addEventListener('date-selected', function(event) {
-            this.prettyDate = event.detail.prettyDate;
-            this.jsonDate = event.detail.jsonDate;
-            this.open = false;
+            this._updateProperties(event.detail);
+          }.bind(this));
+
+          this.datePicker.addEventListener('dismiss', function(event) {
+            this._updateProperties(event.detail);
           }.bind(this));
 
           Polymer.dom(document.querySelector('body')).appendChild(this.datePicker);
 
+        },
+
+        _updateProperties: function(detail) {
+          this.prettyDate = detail.prettyDate;
+          this.jsonDate = detail.jsonDate;
+          this.open = false;
         }
 
       });
