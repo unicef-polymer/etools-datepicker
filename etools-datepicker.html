@@ -84,6 +84,7 @@ Custom property | Description | Default
     <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
       <div class="buttons">
+        <paper-button hidden$="[[!showResetBtn]]">Clear</paper-button>
         <paper-button dialog-dismiss>Cancel</paper-button>
         <paper-button dialog-confirm>OK</paper-button>
       </div>
@@ -163,6 +164,8 @@ Custom property | Description | Default
           if (event.detail.confirmed) {
             this.date = this.$.picker.date;
             this._updateDate();
+          } else {
+            this.fire('dismiss', {});
           }
           event.stopPropagation();
         },

@@ -150,6 +150,10 @@ Custom property | Description | Default
             this.open = false;
           }.bind(this));
 
+          this.datePicker.addEventListener('dismiss', function(event) {
+            this.open = false;
+          }.bind(this));
+
           Polymer.dom(document.querySelector('body')).appendChild(this.datePicker);
 
         }
