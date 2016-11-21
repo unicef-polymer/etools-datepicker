@@ -18,6 +18,9 @@ It also contains a button element (etools-datepicker-button) that creates and ap
   
 <etools-datepicker-button pretty-date="{{prettyD}}" 
   format="DD/MM/YYYY" no-init></etools-datepicker-button>
+  
+<etools-datepicker-button pretty-date="{{prettyD}}" 
+format="DD/MM/YYYY" no-init show-clear-btn></etools-datepicker-button>
 ```
 
 You can combine the element properties as you need.
@@ -31,6 +34,13 @@ Available properties:
 * open: Boolean, if true then calendar will be open by default
 * noInit: Boolean, default: false; if is set: `true` then the datepicker will not be initialized with a default date; 
 it works on both etools-datepicker and etools-datepicker-button elements
+* showClearBtn: Boolean, default: false, if true the clear button will be visible and it can be used to empty the selected date.
+
+### Events fired by etools-datepicker
+
+* date-selected - when date is selected
+* dismiss - when the datepicker modal is closed (click on cancel or clear buttons)
+
 
 ## Styling
 
