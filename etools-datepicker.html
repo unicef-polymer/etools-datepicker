@@ -84,6 +84,7 @@ Custom property | Description | Default
     <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
       <div class="buttons">
+        <paper-button on-tap="_clearSelectedDate" hidden$="[[!showClearBtn]]">Clear</paper-button>
         <paper-button dialog-dismiss>Cancel</paper-button>
         <paper-button dialog-confirm>OK</paper-button>
       </div>
@@ -100,12 +101,12 @@ Custom property | Description | Default
         properties: {
           prettyDate: {
             type: String,
-            value: null,
+            value: '',
             notify: true
           },
           jsonDate: {
             type: String,
-            value: null,
+            value: '',
             notify: true
           },
           format: {
@@ -130,12 +131,16 @@ Custom property | Description | Default
           noInit: {
             type: Boolean,
             value: false
+          },
+          showClearBtn: {
+            type: Boolean,
+            value: false
           }
         },
         ready: function () {
           setTimeout(function() {
             if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
-              this.date = new Date();
+              this.set('date', new Date());
             }
             if (!this.noInit) {
               this._updateDate();
@@ -160,17 +165,30 @@ Custom property | Description | Default
           this.$.dialog.toggle();
         },
         dismissDialog: function (event) {
-          if (event.detail.confirmed) {
+          if (event.detail.canceled === false && event.detail.confirmed) {
             this.date = this.$.picker.date;
             this._updateDate();
+          } else {
+            this.$.picker.date = this.date;
+            this.fire('dismiss', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
           }
           event.stopPropagation();
         },
         _openDatePicker: function (openDatePicker) {
+          if (typeof this.date === 'undefined') {
+            this.$.picker.date = new Date();
+          }
           if (openDatePicker === true) {
             this.$.dialog.open();
             this.open = false;
           }
+        },
+
+        _clearSelectedDate: function() {
+          this.set('date', new Date());
+          this.set('prettyDate', '');
+          this.set('jsonDate', '');
+          this.$.dialog.cancel();
         }
 
       });

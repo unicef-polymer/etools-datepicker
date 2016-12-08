@@ -15,10 +15,13 @@ It also contains a button element (etools-datepicker-button) that creates and ap
     
 <etools-datepicker-button pretty-date="{{prettyD}}" 
   format="DD/MM/YYYY"></etools-datepicker-button>
+  
+<etools-datepicker-button pretty-date="{{prettyD}}" 
+  format="DD/MM/YYYY" no-init></etools-datepicker-button>
 ```
 
-You can combine the element attributes as you need.
-Available attributes:
+You can combine the element properties as you need.
+Available properties:
 * prettyDate: String, selected date with format applied
 * jsonDate: String, JSON date format
 * date: Date, selected date
@@ -26,6 +29,8 @@ Available attributes:
 * maxDate: Date, max date
 * isDisabled: Boolean, disabled state
 * open: Boolean, if true then calendar will be open by default
+* noInit: Boolean, default: false; if is set: `true` then the datepicker will not be initialized with a default date; 
+it works on both etools-datepicker and etools-datepicker-button elements
 
 ## Styling
 
