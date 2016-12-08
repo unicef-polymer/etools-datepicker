@@ -102,9 +102,8 @@ Custom property | Description | Default
         },
 
         _dateChanged: function (date) {
-          if (date && this.datePicker) {
-            var dt = new Date(date);
-            this.datePicker.date = dt;
+          if (this.datePicker) {
+            this.datePicker.date = date ? new Date(date) : date;
             this.datePicker._updateDate();
           }
         },
