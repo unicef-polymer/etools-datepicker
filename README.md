@@ -35,11 +35,14 @@ Available properties:
 * noInit: Boolean, default: false; if is set: `true` then the datepicker will not be initialized with a default date; 
 it works on both etools-datepicker and etools-datepicker-button elements
 * showClearBtn: Boolean, default: false, if true the clear button will be visible and it can be used to empty the selected date.
+* fireDateHasChanged: Boolean, default: false
 
 ### Events fired by etools-datepicker
 
 * date-selected - when date is selected
 * dismiss - when the datepicker modal is closed (click on cancel or clear buttons)
+* date-has-changed - fired when date is changed only by the etools-datepicker-button 
+and only if `fireDateHasChanged` property is set to true 
 
 
 ## Styling
