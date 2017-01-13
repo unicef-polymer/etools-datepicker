@@ -92,8 +92,14 @@ Custom property | Description | Default
           showClearBtn: {
             type: Boolean,
             value: false
+          },
+          fireDateHasChanged: {
+            type: Boolean,
+            value: false
           }
         },
+
+        observers: ['_dateHasChanged(prettyDate, jsonDate)'],
 
         attached: function () {
           this._createDatePickerDialog();
@@ -161,9 +167,20 @@ Custom property | Description | Default
         },
 
         _updateProperties: function(detail) {
-          this.prettyDate = detail.prettyDate;
-          this.jsonDate = detail.jsonDate;
+          this.set('prettyDate', detail.prettyDate);
+          this.set('jsonDate', detail.jsonDate);
           this.open = false;
+        },
+
+        _dateHasChanged: function(prettyDate, jsonDate) {
+          if (this.fireDateHasChanged) {
+            this.debounce('fireDateHasChanged', function(){
+              this.fire('date-has-changed', {
+                prettyDate: prettyDate,
+                jsonDate: jsonDate
+              });
+            }.bind(this), 50);
+          }
         }
 
       });
