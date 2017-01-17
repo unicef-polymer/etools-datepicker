@@ -114,7 +114,9 @@ Custom property | Description | Default
         _dateChanged: function (date) {
           if (this.datePicker) {
             this.datePicker.date = date ? new Date(date) : date;
-            this.datePicker._updateDate();
+            if (!this.noInit) {
+              this.datePicker._updateDate();
+            }
           }
         },
 
