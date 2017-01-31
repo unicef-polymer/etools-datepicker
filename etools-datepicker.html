@@ -189,6 +189,7 @@ Custom property | Description | Default
           this.set('prettyDate', '');
           this.set('jsonDate', '');
           this.$.dialog.cancel();
+          this.fire('clear-and-close', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
         }
 
       });
