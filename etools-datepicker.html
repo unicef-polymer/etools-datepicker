@@ -35,7 +35,7 @@ Custom property | Description | Default
 `--etools-datepicker-btn` | Calendar dialog buttons mixin  | `{}`
 
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="etools-datepicker">
@@ -92,7 +92,7 @@ Custom property | Description | Default
   </template>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -137,7 +137,7 @@ Custom property | Description | Default
             value: false
           }
         },
-        ready: function () {
+        ready: function() {
           setTimeout(function() {
             if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
               this.set('date', new Date());
@@ -147,7 +147,7 @@ Custom property | Description | Default
             }
           }.bind(this), 0);
         },
-        _updateDate: function () {
+        _updateDate: function() {
           if (!this.date) {
             return;
           }
@@ -155,16 +155,16 @@ Custom property | Description | Default
           this.jsonDate = this._dateFormat(this.date, '');
           this.fire('date-selected', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
         },
-        _dateFormat: function (date, format) {
-          return moment(date).format(format);
+        _dateFormat: function(date, format) {
+          return moment(date).format(format);  // eslint-disable-line
         },
-        showDialog: function () {
+        showDialog: function() {
           if (this.isDisabled) {
             return false;
           }
           this.$.dialog.toggle();
         },
-        dismissDialog: function (event) {
+        dismissDialog: function(event) {
           if (event.detail.canceled === false && event.detail.confirmed) {
             this.date = this.$.picker.date;
             this._updateDate();
@@ -174,7 +174,7 @@ Custom property | Description | Default
           }
           event.stopPropagation();
         },
-        _openDatePicker: function (openDatePicker) {
+        _openDatePicker: function(openDatePicker) {
           if (typeof this.date === 'undefined') {
             this.$.picker.date = new Date();
           }

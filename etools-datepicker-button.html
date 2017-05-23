@@ -48,7 +48,7 @@ Custom property | Description | Default
   </template>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -101,7 +101,7 @@ Custom property | Description | Default
 
         observers: ['_dateHasChanged(prettyDate, jsonDate)'],
 
-        attached: function () {
+        attached: function() {
           this._createDatePickerDialog();
         },
 
@@ -111,7 +111,7 @@ Custom property | Description | Default
           }
         },
 
-        _dateChanged: function (date) {
+        _dateChanged: function(date) {
           if (this.datePicker) {
             this.datePicker.date = date ? new Date(date) : date;
             if (!this.noInit) {
@@ -129,7 +129,7 @@ Custom property | Description | Default
           }
         },
 
-        _openDatePicker: function (openDatePicker) {
+        _openDatePicker: function(openDatePicker) {
           if (openDatePicker === true) {
             this._showdatePicker();
           }
@@ -163,13 +163,12 @@ Custom property | Description | Default
           this.datePicker.addEventListener('clear-and-close', function(event) {
             this._updateProperties(event.detail);
           }.bind(this));
-          
+
           this.datePicker.addEventListener('dismiss', function(event) {
             this.open = false;
           }.bind(this));
 
           Polymer.dom(document.querySelector('body')).appendChild(this.datePicker);
-
         },
 
         _updateProperties: function(detail) {
@@ -180,7 +179,7 @@ Custom property | Description | Default
 
         _dateHasChanged: function(prettyDate, jsonDate) {
           if (this.fireDateHasChanged) {
-            this.debounce('fireDateHasChanged', function(){
+            this.debounce('fireDateHasChanged', function() {
               this.fire('date-has-changed', {
                 prettyDate: prettyDate,
                 jsonDate: jsonDate
