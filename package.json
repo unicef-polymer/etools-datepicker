@@ -1,0 +1,14 @@
+{
+  "name": "etools-datepicker",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^2.0.0",
+    "//": "polylint \": \"^2.10.4"
+  },
+  "scripts": {
+    "lint": "npm run lint:javascript; exit 0",
+    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore; exit 0",
+    "//": "polylint\": \"$(npm bin)/polylint -i etools-datepicker-button.html; exit 0"
+  }
+}
