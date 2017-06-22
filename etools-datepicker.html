@@ -81,7 +81,7 @@ Custom property | Description | Default
 
     <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
 
-    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="{{modal}}" with-backdrop="{{withBackdrop}}" on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
       <div class="buttons">
         <paper-button on-tap="_clearSelectedDate" hidden$="[[!showClearBtn]]">Clear</paper-button>
@@ -145,6 +145,14 @@ Custom property | Description | Default
           showClearBtn: {
             type: Boolean,
             value: false
+          },
+          modal: {
+            type: Boolean,
+            value: true
+          },
+          withBackdrop: {
+            type: Boolean,
+            value: true
           }
         },
         ready: function() {
