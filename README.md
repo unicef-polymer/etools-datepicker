@@ -7,19 +7,19 @@ It also contains a button element (etools-datepicker-button) that creates and ap
 ```html
 <etools-datepicker pretty-date="{{prettyDate}}"
     json-date="{{jsonDate}}"
-    min-date="[[currentDate]]" 
+    min-date="[[currentDate]]"
     max-date="[[currentDatePlus14days]]"
     format="LL"
     open="true",
     is-disabled="false"></etools-datepicker>
-    
-<etools-datepicker-button pretty-date="{{prettyD}}" 
+
+<etools-datepicker-button pretty-date="{{prettyD}}"
   format="DD/MM/YYYY"></etools-datepicker-button>
-  
-<etools-datepicker-button pretty-date="{{prettyD}}" 
+
+<etools-datepicker-button pretty-date="{{prettyD}}"
   format="DD/MM/YYYY" no-init></etools-datepicker-button>
-  
-<etools-datepicker-button pretty-date="{{prettyD}}" 
+
+<etools-datepicker-button pretty-date="{{prettyD}}"
 format="DD/MM/YYYY" no-init show-clear-btn></etools-datepicker-button>
 ```
 
@@ -32,7 +32,7 @@ Available properties:
 * maxDate: Date, max date
 * isDisabled: Boolean, disabled state
 * open: Boolean, if true then calendar will be open by default
-* noInit: Boolean, default: false; if is set: `true` then the datepicker will not be initialized with a default date; 
+* noInit: Boolean, default: false; if is set: `true` then the datepicker will not be initialized with a default date;
 it works on both etools-datepicker and etools-datepicker-button elements
 * showClearBtn: Boolean, default: false, if true the clear button will be visible and it can be used to empty the selected date.
 * fireDateHasChanged: Boolean, default: false
@@ -41,8 +41,8 @@ it works on both etools-datepicker and etools-datepicker-button elements
 
 * date-selected - when date is selected
 * dismiss - when the datepicker modal is closed (click on cancel or clear buttons)
-* date-has-changed - fired when date is changed only by the etools-datepicker-button 
-and only if `fireDateHasChanged` property is set to true 
+* date-has-changed - fired when date is changed only by the etools-datepicker-button
+and only if `fireDateHasChanged` property is set to true
 
 
 ## Styling
@@ -77,6 +77,22 @@ Custom property | Description | Default
 ```bash
 $ bower install --save etools-datepicker
 ```
+
+## Linting the code
+
+Innstall local npm packages (run `npm install`)
+Then just run the linting task
+
+```bash
+$ npm run lint
+```
+You should also use polylint. If you don't have Polylint installed run `npm install -g polylint`.
+Then just run the linter on each file you wish to check like so
+
+```bash
+$ polylint -i filename.html
+```
+At the moment polylint crashes if it encounters a missing import. If that happens, temporarily comment out such imports and run the command again.
 
 ## Preview element locally
 Install needed dependencies by running: `$ bower install`.
