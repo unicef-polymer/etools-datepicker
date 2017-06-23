@@ -156,6 +156,7 @@ Custom property | Description | Default
               this._updateDate();
             }
           }.bind(this), 0);
+          //TODO: remove this method after closing issue in paper-date-picker (https://github.com/bendavis78/paper-date-picker/issues/187) -->
           this._selectedYearFix();
         },
         _selectedYearFix: function() {
@@ -165,6 +166,7 @@ Custom property | Description | Default
           if (yearList) {
             yearList.listen(yearList,  'iron-resize', 'centerSelected');
           }
+          // <-- end remove -->
         },
         _updateDate: function() {
           if (!this.date) {
