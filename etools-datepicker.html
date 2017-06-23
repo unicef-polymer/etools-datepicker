@@ -156,6 +156,15 @@ Custom property | Description | Default
               this._updateDate();
             }
           }.bind(this), 0);
+          this._selectedYearFix();
+        },
+        _selectedYearFix: function() {
+          var datepicker = Polymer.dom(this.root).querySelector('#picker'),
+              yearList = datepicker && datepicker.$ && datepicker.$.yearList;
+
+          if (yearList) {
+            yearList.listen(yearList,  'iron-resize', 'centerSelected');
+          }
         },
         _updateDate: function() {
           if (!this.date) {
