@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
 
     <link rel="import" href="../etools-datepicker.html">
   </head>
@@ -20,10 +21,27 @@
 
     <script>
       suite('etools-datepicker', function() {
-        test('instantiating the element works', function() {
-          var element = fixture('basic');
-          assert.equal(element.is, 'etools-datepicker');
+        var basic
+        setup(function() {
+          basic = fixture('basic')
         });
+        test('instantiating the element works', function() {
+          assert.equal(basic.is, 'etools-datepicker');
+        });
+        test('tapping datepicker icon toggles it open', function() {
+          expect(dialog.attributes[4].name).to.equal('aria-hidden')
+          var calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
+          MockInteractions.tap(calendarIcon)
+          expect(dialog.attributes[4].name).to.not.equal('aria-hidden')
+        });
+        test('tapping a date selects it', function() {
+          var calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
+          MockInteractions.tap(calendarIcon)
+          var firstDay = dialog.children.picker.querySelector('.day-item.selection')
+          var firstDayValue = firstDay.attributes.date.value
+          MockInteractions.tap(firstDay)
+          expect((new Date(firstDayValue + 'T00:00:00' + '-04:00')).toLocaleDateString()).to.equal(picker.date.toLocaleDateString())
+        })
       });
     </script>
   </body>
