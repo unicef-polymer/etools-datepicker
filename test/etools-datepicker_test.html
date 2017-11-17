@@ -21,7 +21,7 @@
 
     <script>
       suite('etools-datepicker', function() {
-        var basic
+        let basic
         setup(function() {
           basic = fixture('basic')
         });
@@ -29,18 +29,23 @@
           assert.equal(basic.is, 'etools-datepicker');
         });
         test('tapping datepicker icon toggles it open', function() {
-          expect(dialog.attributes[4].name).to.equal('aria-hidden')
-          var calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
+          expect(dialog.opened).to.equal(false)
+          let calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
           MockInteractions.tap(calendarIcon)
-          expect(dialog.attributes[4].name).to.not.equal('aria-hidden')
+          expect(dialog.opened).to.equal(true)
         });
         test('tapping a date selects it', function() {
-          var calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
+          let calendarIcon = Polymer.dom(basic.root).querySelector('iron-icon')
           MockInteractions.tap(calendarIcon)
-          var firstDay = dialog.children.picker.querySelector('.day-item.selection')
-          var firstDayValue = firstDay.attributes.date.value
+          let firstDay = picker.$$('#calendar').$$('.day-item.selection')
+          let firstDayValue = firstDay.attributes.date.value
           MockInteractions.tap(firstDay)
-          expect((new Date(firstDayValue + 'T00:00:00' + '-04:00')).toLocaleDateString()).to.equal(picker.date.toLocaleDateString())
+          let firstDayArray = firstDayValue.split('-')
+          expect(
+            Date.UTC(firstDayArray[0], firstDayArray[1], firstDayArray[2])
+          ).to.equal(
+            Date.UTC(picker.date.getFullYear(), picker.date.getMonth() + 1, picker.date.getDate())
+          )
         })
       });
     </script>
