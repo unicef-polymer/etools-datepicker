@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <link rel="import" href="../iron-icons/iron-icons.html">
 
@@ -6,7 +6,8 @@
 <link rel="import" href="../paper-date-picker/paper-date-picker-dialog-style.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../moment-element/moment-with-locales-import.html">
+<link rel="import" href="../moment-element/moment.html">
+<link rel="import" href="../neon-animation/web-animations.html">
 
 
 
@@ -34,13 +35,15 @@ Custom property | Description | Default
 `--etools-datepicker-btns-text-color` | Calendar dialog buttons text color  | `#d1d1d1`
 `--etools-datepicker-btn` | Calendar dialog buttons mixin  | `{}`
 
-
+@customElement
 @demo demo/index.html
 -->
 
 <dom-module id="etools-datepicker">
   <template>
-    <style is="custom-style" include="paper-date-picker-dialog-style">
+
+    <custom-style>
+    <style include="paper-date-picker-dialog-style">
       :host {
         display: inline-block;
         --primary-text-color: var(--etools-datepicker-primary-color, #333333);
@@ -62,7 +65,7 @@ Custom property | Description | Default
       }
       .buttons paper-button {
         color: var(--etools-datepicker-btns-text-color, #4a90e2);
-        @apply(--etools-datepicker-btn);
+        @apply --etools-datepicker-btn;
       }
       .pick-date {
         cursor: pointer;
@@ -78,6 +81,7 @@ Custom property | Description | Default
         }
       }
     </style>
+   </custom-style>
 
     <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
 
@@ -92,70 +96,73 @@ Custom property | Description | Default
   </template>
 
   <script>
-    (function() {
       'use strict';
 
-      Polymer({
-        is: 'etools-datepicker',
-
-        properties: {
-          prettyDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          jsonDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          format: {
-            type: String,
-            value: 'LL'
-          },
-          open: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            observer: '_openDatePicker'
-          },
-          isDisabled: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true
-          },
-          dynamicallyCreated: {
-            type: Boolean,
-            value: false
-          },
-          noInit: {
-            type: Boolean,
-            value: false
-          },
-          date: {
-            type: Date,
-            notify: true
-          },
-          minDate: {
-            type: Date,
-          },
-          maxDate: {
-            type: Date,
-          },
-          showClearBtn: {
-            type: Boolean,
-            value: false
-          },
-          modal: {
-            type: Boolean,
-            value: true
-          },
-          withBackdrop: {
-            type: Boolean,
-            value: true
-          }
-        },
-        ready: function() {
+      class EtoolsDatepicker extends Polymer.Element {
+        static get is() {
+          return 'etools-datepicker';
+        }
+        static get properties() {
+          return {
+            prettyDate: {
+              type: String,
+              value: '',
+              notify: true
+            },
+            jsonDate: {
+              type: String,
+              value: '',
+              notify: true
+            },
+            format: {
+              type: String,
+              value: 'LL'
+            },
+            open: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_openDatePicker'
+            },
+            isDisabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+            dynamicallyCreated: {
+              type: Boolean,
+              value: false
+            },
+            noInit: {
+              type: Boolean,
+              value: false
+            },
+            date: {
+              type: Date,
+              notify: true
+            },
+            minDate: {
+              type: Date,
+            },
+            maxDate: {
+              type: Date,
+            },
+            showClearBtn: {
+              type: Boolean,
+              value: false
+            },
+            modal: {
+              type: Boolean,
+              value: true
+            },
+            withBackdrop: {
+              type: Boolean,
+              value: true
+            }
+          };
+        }
+        ready() {
+          super.ready();
           setTimeout(function() {
             if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
               this.set('date', new Date());
@@ -166,44 +173,46 @@ Custom property | Description | Default
           }.bind(this), 0);
           //TODO: remove this method after closing issue in paper-date-picker (https://github.com/bendavis78/paper-date-picker/issues/187) -->
           this._selectedYearFix();
-        },
-        _selectedYearFix: function() {
-          var datepicker = Polymer.dom(this.root).querySelector('#picker'),
+        }
+        _selectedYearFix() {
+          var datepicker = this.shadowRoot.querySelector('#picker'),
               yearList = datepicker && datepicker.$ && datepicker.$.yearList;
 
           if (yearList) {
             yearList.listen(yearList,  'iron-resize', 'centerSelected');
           }
           // <-- end remove -->
-        },
-        _updateDate: function() {
+        }
+        _updateDate() {
           if (!this.date) {
             return;
           }
           this.prettyDate = this._dateFormat(this.date, this.format);
           this.jsonDate = this._dateFormat(this.date, '');
-          this.fire('date-selected', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
-        },
-        _dateFormat: function(date, format) {
+          this.dispatchEvent(new CustomEvent('date-selected', {detail: {
+                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
+        }
+        _dateFormat(date, format) {
           return moment(date).format(format);  // eslint-disable-line
-        },
-        showDialog: function() {
+        }
+        showDialog() {
           if (this.isDisabled) {
             return false;
           }
           this.$.dialog.toggle();
-        },
-        dismissDialog: function(event) {
+        }
+        dismissDialog(event) {
           if (event.detail.canceled === false && event.detail.confirmed) {
             this.date = this.$.picker.date;
             this._updateDate();
           } else {
             this.$.picker.date = this.date;
-            this.fire('dismiss', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
+            this.dispatchEvent(new CustomEvent('dismiss', {detail: {
+                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
           }
           event.stopPropagation();
-        },
-        _openDatePicker: function(openDatePicker) {
+        }
+        _openDatePicker(openDatePicker) {
           if (typeof this.date === 'undefined') {
             this.$.picker.date = new Date();
           }
@@ -211,17 +220,18 @@ Custom property | Description | Default
             this.$.dialog.open();
             this.open = false;
           }
-        },
+        }
 
-        _clearSelectedDate: function() {
+        _clearSelectedDate() {
           this.set('date', new Date());
           this.set('prettyDate', '');
           this.set('jsonDate', '');
           this.$.dialog.cancel();
-          this.fire('clear-and-close', {prettyDate: this.prettyDate, jsonDate: this.jsonDate});
+          this.dispatchEvent(new CustomEvent('clear-and-close', {detail: {
+                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
         }
 
-      });
-    })();
+      }
+      customElements.define(EtoolsDatepicker.is, EtoolsDatepicker);
   </script>
 </dom-module>

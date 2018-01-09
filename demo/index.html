@@ -8,20 +8,22 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../polymer/polymer.html">
 
     <link rel="import" href="../etools-datepicker.html">
     <link rel="import" href="../etools-datepicker-button.html">
     <link rel="import" href="min-max-date-demo-data.html">
-
-    <style is="custom-style" include="demo-pages-shared-styles">
-      .vertical-section-container {
-        max-width: 900px;
-      }
-      .selected-date {
-        display: inline-block;
-        margin-left: 25px;
-      }
-    </style>
+   <custom-style>
+      <style include="demo-pages-shared-styles">
+        .vertical-section-container {
+          max-width: 900px;
+        }
+        .selected-date {
+          display: inline-block;
+          margin-left: 25px;
+        }
+      </style>
+    </custom-style>
   </head>
   <body>
 
@@ -31,83 +33,97 @@
 
       <p>Click on calendar icon to open calendar, then select a date.</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <etools-datepicker pretty-date="{{prettyDate}}"></etools-datepicker>
-          <span class="selected-date">Selected date: [[prettyDate]]</span>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <etools-datepicker pretty-date="{{prettyDate}}"></etools-datepicker>
+            <span class="selected-date">Selected date: [[prettyDate]]</span>
+          </template>
+      </dom-bind>
       </demo-snippet>
 
       <p>You can format the date according with <a href="http://momentjs.com/docs/#/displaying/" target="_blank">momentjs format options</a>.</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <div>
-            <etools-datepicker pretty-date="{{prettyDate1}}" format="DD/MM/YYYY"></etools-datepicker>
-            <span class="selected-date">Selected date (DD/MM/YYYY): [[prettyDate1]]</span>
-          </div>
-          <div>
-            <etools-datepicker pretty-date="{{prettyDate2}}" format="Do MMMM YYYY"></etools-datepicker>
-            <span class="selected-date">Selected date (Do MMMM YYYY): [[prettyDate2]]</span>
-          </div>
-          <div>
-            <etools-datepicker json-date="{{jsonDate}}"></etools-datepicker>
-            <span class="selected-date">Selected date (JSON): [[jsonDate]]</span>
-          </div>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <div>
+              <etools-datepicker pretty-date="{{prettyDate1}}" format="DD/MM/YYYY"></etools-datepicker>
+              <span class="selected-date">Selected date (DD/MM/YYYY): [[prettyDate1]]</span>
+            </div>
+            <div>
+              <etools-datepicker pretty-date="{{prettyDate2}}" format="Do MMMM YYYY"></etools-datepicker>
+              <span class="selected-date">Selected date (Do MMMM YYYY): [[prettyDate2]]</span>
+            </div>
+            <div>
+              <etools-datepicker json-date="{{jsonDate}}"></etools-datepicker>
+              <span class="selected-date">Selected date (JSON): [[jsonDate]]</span>
+            </div>
+          </template>
+        </dom-bind>
       </demo-snippet>
 
       <p>You can also use element open property (<i>true/false</i>) to make the calendar opened after the element is stamped.</p>
 
       <p>You can chose to disable days that are not in a specific interval</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <!-- get min and max date for this demo -->
-          <min-max-date-demo-data min-date="{{currentDate}}" max-date="{{currentDatePlus14days}}"></min-max-date-demo-data>
+        <dom-bind>
+          <template is="dom-bind">
+            <!-- get min and max date for this demo -->
+            <min-max-date-demo-data min-date="{{currentDate}}" max-date="{{currentDatePlus14days}}"></min-max-date-demo-data>
 
-          <!-- use min and max date to set calendar available days -->
-          <etools-datepicker pretty-date="{{prettyDate}}" min-date="[[currentDate]]" max-date="[[currentDatePlus14days]]"></etools-datepicker>
-          <span class="selected-date">Selected date: [[prettyDate]]</span>
-        </template>
+            <!-- use min and max date to set calendar available days -->
+            <etools-datepicker pretty-date="{{prettyDate}}" min-date="[[currentDate]]" max-date="[[currentDatePlus14days]]"></etools-datepicker>
+            <span class="selected-date">Selected date: [[prettyDate]]</span>
+          </template>
+        </dom-bind>
       </demo-snippet>
 
 
       <p>Disabled date picker</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <etools-datepicker pretty-date="{{prettyDate}}" is-disabled="true"></etools-datepicker>
-          <span class="selected-date">Selected date: [[prettyDate]]</span>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <etools-datepicker pretty-date="{{prettyDate}}" is-disabled="true"></etools-datepicker>
+            <span class="selected-date">Selected date: [[prettyDate]]</span>
+          </template>
+        </dom-bind>
       </demo-snippet>
 
 
       <p>Dynamically created datepicker</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <min-max-date-demo-data min-date="{{currentDate}}" max-date="{{currentDatePlus14days}}"></min-max-date-demo-data>
-          <etools-datepicker-button date="{{currentDatePlus14days}}" pretty-date="{{prettyD}}" format="DD/MM/YYYY"></etools-datepicker-button>
-          <span class="selected-date">Selected date: [[prettyD]]</span>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <min-max-date-demo-data min-date="{{currentDate}}" max-date="{{currentDatePlus14days}}"></min-max-date-demo-data>
+            <etools-datepicker-button date="{{currentDatePlus14days}}" pretty-date="{{prettyD}}" format="DD/MM/YYYY"></etools-datepicker-button>
+            <span class="selected-date">Selected date: [[prettyD]]</span>
+          </template>
+        </dom-bind>
       </demo-snippet>
 
       <p>Datepickers with no date initialization after element stamp</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <etools-datepicker-button pretty-date="{{prettyD1}}" format="DD/MM/YYYY" no-init></etools-datepicker-button>
-          <span class="selected-date">Selected date: [[prettyD1]]</span>
-          <br>
-          <etools-datepicker pretty-date="{{prettyD2}}" format="DD/MM/YYYY" no-init></etools-datepicker>
-          <span class="selected-date">Selected date: [[prettyD2]]</span>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <etools-datepicker-button pretty-date="{{prettyD1}}" format="DD/MM/YYYY" no-init></etools-datepicker-button>
+            <span class="selected-date">Selected date: [[prettyD1]]</span>
+            <br>
+            <etools-datepicker pretty-date="{{prettyD2}}" format="DD/MM/YYYY" no-init></etools-datepicker>
+            <span class="selected-date">Selected date: [[prettyD2]]</span>
+          </template>
+        </dom-bind>
       </demo-snippet>
 
       <p>Datepickers with clear button</p>
       <demo-snippet>
-        <template is="dom-bind">
-          <etools-datepicker-button pretty-date="{{prettyDate3}}" format="DD/MM/YYYY" show-clear-btn></etools-datepicker-button>
-          <span class="selected-date">Selected date: [[prettyDate3]]</span>
-          <br>
-          <etools-datepicker pretty-date="{{prettyDate4}}" format="DD/MM/YYYY" show-clear-btn></etools-datepicker>
-          <span class="selected-date">Selected date: [[prettyDate4]]</span>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <etools-datepicker-button pretty-date="{{prettyDate3}}" format="DD/MM/YYYY" show-clear-btn></etools-datepicker-button>
+            <span class="selected-date">Selected date: [[prettyDate3]]</span>
+            <br>
+            <etools-datepicker pretty-date="{{prettyDate4}}" format="DD/MM/YYYY" show-clear-btn></etools-datepicker>
+            <span class="selected-date">Selected date: [[prettyDate4]]</span>
+          </template>
+        <dom-bind>
       </demo-snippet>
 
 
