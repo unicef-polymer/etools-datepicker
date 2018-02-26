@@ -7,7 +7,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
-    "paper-date-picker": "polymer-paper-date-picker#^2.0.0-rc2",
+    "paper-date-picker": "polymer-paper-date-picker#900051837b7279353c4892f30548c54d38f44e3c",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "iron-icons": "PolymerElements/iron-icons#^2.0.0",
     "web-animations-js": "web-animations/web-animations-js#^2.2.0"
