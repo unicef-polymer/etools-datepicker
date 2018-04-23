@@ -146,10 +146,10 @@ Custom property | Description | Default
               notify: true
             },
             minDate: {
-              type: Date,
+              type: Date
             },
             maxDate: {
-              type: Date,
+              type: Date
             },
             showClearBtn: {
               type: Boolean,
@@ -175,15 +175,16 @@ Custom property | Description | Default
               this._updateDate();
             }
           }.bind(this), 0);
-          //TODO: remove this method after closing issue in paper-date-picker (https://github.com/bendavis78/paper-date-picker/issues/187) -->
+          // TODO: remove this method after closing issue in paper-date-picker
+          // (https://github.com/bendavis78/paper-date-picker/issues/187)
           this._selectedYearFix();
         }
         _selectedYearFix() {
-          var datepicker = this.shadowRoot.querySelector('#picker'),
-              yearList = datepicker && datepicker.$ && datepicker.$.yearList;
+          let datepicker = this.shadowRoot.querySelector('#picker');
+          let yearList = datepicker && datepicker.$ && datepicker.$.yearList;
 
           if (yearList) {
-            yearList.listen(yearList,  'iron-resize', 'centerSelected');
+            yearList.listen(yearList, 'iron-resize', 'centerSelected');
           }
           // <-- end remove -->
         }
@@ -194,7 +195,7 @@ Custom property | Description | Default
           this.prettyDate = this._dateFormat(this.date, this.format);
           this.jsonDate = this._dateFormat(this.date, '');
           this.dispatchEvent(new CustomEvent('date-selected', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
+            prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true}));
         }
         _dateFormat(date, format) {
           return moment(date).format(format);  // eslint-disable-line
@@ -212,7 +213,7 @@ Custom property | Description | Default
           } else {
             this.$.picker.date = this.date;
             this.dispatchEvent(new CustomEvent('dismiss', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
+              prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true}));
           }
           event.stopPropagation();
         }
@@ -232,7 +233,7 @@ Custom property | Description | Default
           this.set('jsonDate', '');
           this.$.dialog.cancel();
           this.dispatchEvent(new CustomEvent('clear-and-close', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
+            prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true}));
         }
 
       }

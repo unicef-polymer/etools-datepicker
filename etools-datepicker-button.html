@@ -117,7 +117,7 @@ Custom property | Description | Default
           this._createDatePickerDialog();
         }
 
-        disconnectedCallback () {
+        disconnectedCallback() {
           super.disconnectedCallback();
           if (this.datePicker) {
             document.querySelector('body').removeChild(this.datePicker);
@@ -201,9 +201,9 @@ Custom property | Description | Default
               () => {this.dispatchEvent(new CustomEvent('date-has-changed', {detail: {
                         prettyDate: prettyDate,
                         jsonDate: jsonDate
-                      }, bubbles: true, composed: true }));
+                      }, bubbles: true, composed: true}));
                     });
-            };
+            }
           }
       }
       customElements.define(EtoolsDatepickerButton.is, EtoolsDatepickerButton);
