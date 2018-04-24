@@ -1,7 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
-
 <link rel="import" href="../iron-icons/iron-icons.html">
-
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-date-picker/paper-date-picker.html">
 <link rel="import" href="../paper-date-picker/paper-date-picker-dialog-style.html">
@@ -9,7 +7,6 @@
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../moment-imports/moment-min.html">
 <link rel="import" href="../neon-animation/web-animations.html">
-
 
 
 <!--
@@ -44,52 +41,59 @@ Custom property | Description | Default
   <template>
 
     <custom-style>
-    <style include="paper-date-picker-dialog-style">
-      :host {
-        display: inline-block;
-        --primary-text-color: var(--etools-datepicker-primary-color, #333333);
-        --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
+      <style include="paper-date-picker-dialog-style">
+        :host {
+          display: inline-block;
+          --primary-text-color: var(--etools-datepicker-primary-color, #333333);
+          --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
 
-        --default-primary-color: var(--etools-datepicker-heading-bg-color, #4a90e2);
-        --text-primary-color: var(--etools-datepicker-heading-date-color, #ffffff);
-        --light-primary-color: var(--etools-datepicker-heading-year-color, #c5cae9);
+          --default-primary-color: var(--etools-datepicker-heading-bg-color, #4a90e2);
+          --text-primary-color: var(--etools-datepicker-heading-date-color, #ffffff);
+          --light-primary-color: var(--etools-datepicker-heading-year-color, #c5cae9);
 
-        --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
+          --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
 
-        --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
-      }
-      [hidden] {
-        display: none !important;
-      }
-      .buttons {
-        background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
-      }
-      .buttons paper-button {
-        color: var(--etools-datepicker-btns-text-color, #4a90e2);
-        @apply --etools-datepicker-btn;
-      }
-      .pick-date {
-        cursor: pointer;
-      }
-      .pick-date[disabled] {
-        color: var(--etools-datepicker-disabled-color, #d1d1d1);
-        cursor: not-allowed;
-      }
-      paper-date-picker {
-        --paper-date-picker-heading: {
-          z-index: 1;
-          margin-bottom: -61px;
+          --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
         }
-        --paper-date-picker-heading-date: {
+
+        [hidden] {
+          display: none !important;
+        }
+
+        .buttons {
+          background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
+        }
+
+        .buttons paper-button {
+          color: var(--etools-datepicker-btns-text-color, #4a90e2);
+          @apply --etools-datepicker-btn;
+        }
+
+        .pick-date {
+          cursor: pointer;
+        }
+
+        .pick-date[disabled] {
+          color: var(--etools-datepicker-disabled-color, #d1d1d1);
+          cursor: not-allowed;
+        }
+
+        paper-date-picker {
+          --paper-date-picker-heading: {
+            z-index: 1;
+            margin-bottom: -61px;
+          } --paper-date-picker-heading-date: {
           @apply --layout-vertical;
         }
-      }
-    </style>
-   </custom-style>
+        }
+      </style>
+    </custom-style>
 
-    <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog" icon="icons:date-range"></iron-icon>
+    <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog"
+               icon="icons:date-range"></iron-icon>
 
-    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="{{modal}}" with-backdrop="{{withBackdrop}}" on-iron-overlay-closed="dismissDialog">
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="{{modal}}" with-backdrop="{{withBackdrop}}"
+                  on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
       <div class="buttons">
         <paper-button on-tap="_clearSelectedDate" hidden$="[[!showClearBtn]]">Clear</paper-button>
@@ -100,142 +104,164 @@ Custom property | Description | Default
   </template>
 
   <script>
-      'use strict';
+    'use strict';
 
-      class EtoolsDatepicker extends Polymer.Element {
-        static get is() {
-          return 'etools-datepicker';
-        }
-        static get properties() {
-          return {
-            prettyDate: {
-              type: String,
-              value: '',
-              notify: true
-            },
-            jsonDate: {
-              type: String,
-              value: '',
-              notify: true
-            },
-            format: {
-              type: String,
-              value: 'LL'
-            },
-            open: {
-              type: Boolean,
-              value: false,
-              notify: true,
-              observer: '_openDatePicker'
-            },
-            isDisabled: {
-              type: Boolean,
-              value: false,
-              reflectToAttribute: true
-            },
-            dynamicallyCreated: {
-              type: Boolean,
-              value: false
-            },
-            noInit: {
-              type: Boolean,
-              value: false
-            },
-            date: {
-              type: Date,
-              notify: true
-            },
-            minDate: {
-              type: Date,
-            },
-            maxDate: {
-              type: Date,
-            },
-            showClearBtn: {
-              type: Boolean,
-              value: false
-            },
-            modal: {
-              type: Boolean,
-              value: true
-            },
-            withBackdrop: {
-              type: Boolean,
-              value: true
-            }
-          };
-        }
-        ready() {
-          super.ready();
-          setTimeout(function() {
-            if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
-              this.set('date', new Date());
-            }
-            if (!this.noInit) {
-              this._updateDate();
-            }
-          }.bind(this), 0);
-          //TODO: remove this method after closing issue in paper-date-picker (https://github.com/bendavis78/paper-date-picker/issues/187) -->
-          this._selectedYearFix();
-        }
-        _selectedYearFix() {
-          var datepicker = this.shadowRoot.querySelector('#picker'),
-              yearList = datepicker && datepicker.$ && datepicker.$.yearList;
-
-          if (yearList) {
-            yearList.listen(yearList,  'iron-resize', 'centerSelected');
-          }
-          // <-- end remove -->
-        }
-        _updateDate() {
-          if (!this.date) {
-            return;
-          }
-          this.prettyDate = this._dateFormat(this.date, this.format);
-          this.jsonDate = this._dateFormat(this.date, '');
-          this.dispatchEvent(new CustomEvent('date-selected', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
-        }
-        _dateFormat(date, format) {
-          return moment(date).format(format);  // eslint-disable-line
-        }
-        showDialog() {
-          if (this.isDisabled) {
-            return false;
-          }
-          this.$.dialog.toggle();
-        }
-        dismissDialog(event) {
-          if (event.detail.canceled === false && event.detail.confirmed) {
-            this.date = this.$.picker.date;
-            this._updateDate();
-          } else {
-            this.$.picker.date = this.date;
-            this.dispatchEvent(new CustomEvent('dismiss', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
-          }
-          event.stopPropagation();
-        }
-        _openDatePicker(openDatePicker) {
-          if (typeof this.date === 'undefined') {
-            this.$.picker.date = new Date();
-          }
-          if (openDatePicker === true) {
-            this.$.dialog.open();
-            this.open = false;
-          }
-        }
-
-        _clearSelectedDate() {
-          this.set('date', new Date());
-          this.set('prettyDate', '');
-          this.set('jsonDate', '');
-          this.$.dialog.cancel();
-          this.dispatchEvent(new CustomEvent('clear-and-close', {detail: {
-                        prettyDate: this.prettyDate, jsonDate: this.jsonDate}, bubbles: true, composed: true }));
-        }
-
+    /**
+     * @polymer
+     * @customElement
+     */
+    class EtoolsDatepicker extends Polymer.Element {
+      static get is() {
+        return 'etools-datepicker';
       }
-      customElements.define(EtoolsDatepicker.is, EtoolsDatepicker);
+
+      static get properties() {
+        return {
+          prettyDate: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          jsonDate: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          format: {
+            type: String,
+            value: 'LL'
+          },
+          open: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            observer: '_openDatePicker'
+          },
+          isDisabled: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          dynamicallyCreated: {
+            type: Boolean,
+            value: false
+          },
+          noInit: {
+            type: Boolean,
+            value: false
+          },
+          date: {
+            type: Date,
+            notify: true
+          },
+          minDate: {
+            type: Date
+          },
+          maxDate: {
+            type: Date
+          },
+          showClearBtn: {
+            type: Boolean,
+            value: false
+          },
+          modal: {
+            type: Boolean,
+            value: true
+          },
+          withBackdrop: {
+            type: Boolean,
+            value: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        setTimeout(function() {
+          if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
+            this.set('date', new Date());
+          }
+          if (!this.noInit) {
+            this._updateDate();
+          }
+        }.bind(this), 0);
+        // TODO: remove this method after closing issue in paper-date-picker
+        // (https://github.com/bendavis78/paper-date-picker/issues/187)
+        this._selectedYearFix();
+      }
+
+      _selectedYearFix() {
+        let datepicker = this.shadowRoot.querySelector('#picker');
+        let yearList = datepicker && datepicker.$ && datepicker.$.yearList;
+
+        if (yearList) {
+          yearList.listen(yearList, 'iron-resize', 'centerSelected');
+        }
+      }
+
+      _updateDate() {
+        if (!this.date) {
+          return;
+        }
+        this.prettyDate = this._dateFormat(this.date, this.format);
+        this.jsonDate = this._dateFormat(this.date, '');
+        this.dispatchEvent(new CustomEvent('date-selected', {
+          detail: {
+            prettyDate: this.prettyDate, jsonDate: this.jsonDate
+          }, bubbles: true, composed: true
+        }));
+      }
+
+      _dateFormat(date, format) {
+        return moment(date).format(format);  // eslint-disable-line
+      }
+
+      showDialog() {
+        if (this.isDisabled) {
+          return false;
+        }
+        this.$.dialog.toggle();
+      }
+
+      dismissDialog(event) {
+        if (event.detail.canceled === false && event.detail.confirmed) {
+          this.date = this.$.picker.date;
+          this._updateDate();
+        } else {
+          this.$.picker.date = this.date;
+          this.dispatchEvent(new CustomEvent('dismiss', {
+            detail: {
+              prettyDate: this.prettyDate, jsonDate: this.jsonDate
+            }, bubbles: true, composed: true
+          }));
+        }
+        event.stopPropagation();
+      }
+
+      _openDatePicker(openDatePicker) {
+        if (typeof this.date === 'undefined') {
+          this.$.picker.date = new Date();
+        }
+        if (openDatePicker === true) {
+          this.$.dialog.open();
+          this.open = false;
+        }
+      }
+
+      _clearSelectedDate() {
+        this.set('date', new Date());
+        this.set('prettyDate', '');
+        this.set('jsonDate', '');
+        this.$.dialog.cancel();
+        this.dispatchEvent(new CustomEvent('clear-and-close', {
+          detail: {
+            prettyDate: this.prettyDate, jsonDate: this.jsonDate
+          }, bubbles: true, composed: true
+        }));
+      }
+
+    }
+
+    customElements.define(EtoolsDatepicker.is, EtoolsDatepicker);
   </script>
 </dom-module>
