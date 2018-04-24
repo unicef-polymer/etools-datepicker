@@ -1,4 +1,5 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="etools-datepicker.html">
 
@@ -18,43 +19,54 @@ Custom property | Description | Default
 `--etools-datepicker-btn-height` | Button height | `24px`
 `--etools-datepicker-btn-disabled-color` | Disabled color | `#d1d1d1`
 
-
+@customElement
 @demo demo/index.html
 -->
 
 <dom-module id="etools-datepicker-button">
   <template>
-    <style is="custom-style" include="paper-date-picker-dialog-style">
-      :host {
-        display: inline-block;
-      }
-      .pick-date {
-        cursor: pointer;
-      }
-      iron-icon {
-        --iron-icon: {
-          @apply(--etools-datepicker-btn);
-        };
-        --iron-icon-width: var(--etools-datepicker-btn-width, 24px);
-        --iron-icon-height: var(--etools-datepicker-btn-height, 24px);
-      }
+    <custom-style>
+      <style is="custom-style" include="paper-date-picker-dialog-style">
+        :host {
+          display: inline-block;
+        }
 
-      .pick-date[disabled] {
-        color: var(--etools-datepicker-btn-disabled-color, #d1d1d1);
-        cursor: not-allowed;
-      }
-    </style>
-    <iron-icon class="pick-date" disabled$="[[isDisabled]]" on-tap="_showdatePicker" icon="icons:date-range"></iron-icon>
+        .pick-date {
+          cursor: pointer;
+        }
+
+        iron-icon {
+          --iron-icon: {
+            @apply --etools-datepicker-btn;
+          };
+          --iron-icon-width: var(--etools-datepicker-btn-width, 24px);
+          --iron-icon-height: var(--etools-datepicker-btn-height, 24px);
+        }
+
+        .pick-date[disabled] {
+          color: var(--etools-datepicker-btn-disabled-color, #d1d1d1);
+          cursor: not-allowed;
+        }
+      </style>
+    </custom-style>
+    <iron-icon class="pick-date" disabled$="[[isDisabled]]" on-tap="_showdatePicker"
+               icon="icons:date-range"></iron-icon>
   </template>
 
   <script>
-    (function() {
-      'use strict';
+    'use strict';
 
-      Polymer({
-        is: 'etools-datepicker-button',
+    /**
+     * @polymer
+     * @customElement
+     */
+    class EtoolsDatepickerButton extends Polymer.Element {
+      static get is() {
+        return 'etools-datepicker-button';
+      }
 
-        properties: {
+      static get properties() {
+        return {
           prettyDate: {
             type: String,
             value: '',
@@ -96,99 +108,115 @@ Custom property | Description | Default
           fireDateHasChanged: {
             type: Boolean,
             value: false
+          },
+          datePicker: {
+            type: Object
           }
-        },
+        };
+      }
 
-        observers: ['_dateHasChanged(prettyDate, jsonDate)'],
+      static get observers() {
+        return ['_dateHasChanged(prettyDate, jsonDate)'];
+      }
 
-        attached: function() {
-          this._createDatePickerDialog();
-        },
+      connectedCallback() {
+        super.connectedCallback();
+        this._createDatePickerDialog();
+      }
 
-        detached: function() {
-          if (this.datePicker) {
-            Polymer.dom(document.querySelector('body')).removeChild(this.datePicker);
-          }
-        },
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        if (this.datePicker) {
+          document.querySelector('body').removeChild(this.datePicker);
+        }
+      }
 
-        _dateChanged: function(date) {
-          if (this.datePicker) {
-            this.datePicker.date = date ? new Date(date) : date;
-            if (!this.noInit) {
-              this.datePicker._updateDate();
-            }
-          }
-        },
-
-        _showdatePicker: function() {
-          if (this.isDisabled === true) {
-            return;
-          }
-          if (this.datePicker) {
-            this.datePicker.open = true;
-          }
-        },
-
-        _openDatePicker: function(openDatePicker) {
-          if (openDatePicker === true) {
-            this._showdatePicker();
-          }
-        },
-
-        _createDatePickerDialog: function() {
-          this.datePicker = document.createElement('etools-datepicker');
-          this.datePicker.prettyDate = this.prettyDate;
-          this.datePicker.jsonDate = this.jsonDate;
-          this.datePicker.format = this.format;
-          this.datePicker.open = this.open;
-          this.datePicker.isDisabled = this.isDisabled;
-          this.datePicker.dynamicallyCreated = true;
-          this.datePicker.noInit = this.noInit;
-          this.datePicker.showClearBtn = this.showClearBtn;
-
-          if (this.date) {
-            this.datePicker.date = this.date;
-          }
-          if (this.minDate) {
-            this.datePicker.minDate = this.minDate;
-          }
-          if (this.maxDate) {
-            this.datePicker.maxDate = this.maxDate;
-          }
-
-          this.datePicker.addEventListener('date-selected', function(event) {
-            this._updateProperties(event.detail);
-          }.bind(this));
-
-          this.datePicker.addEventListener('clear-and-close', function(event) {
-            this._updateProperties(event.detail);
-          }.bind(this));
-
-          this.datePicker.addEventListener('dismiss', function(event) {
-            this.open = false;
-          }.bind(this));
-
-          Polymer.dom(document.querySelector('body')).appendChild(this.datePicker);
-        },
-
-        _updateProperties: function(detail) {
-          this.set('prettyDate', detail.prettyDate);
-          this.set('jsonDate', detail.jsonDate);
-          this.open = false;
-        },
-
-        _dateHasChanged: function(prettyDate, jsonDate) {
-          if (this.fireDateHasChanged) {
-            this.debounce('fireDateHasChanged', function() {
-              this.fire('date-has-changed', {
-                prettyDate: prettyDate,
-                jsonDate: jsonDate
-              });
-            }.bind(this), 50);
+      _dateChanged(date) {
+        if (this.datePicker) {
+          this.datePicker.date = date ? new Date(date) : date;
+          if (!this.noInit) {
+            this.datePicker._updateDate();
           }
         }
+      }
 
-      });
-    })();
+      _showdatePicker() {
+        if (this.isDisabled === true) {
+          return;
+        }
+        if (this.datePicker) {
+          this.datePicker.open = true;
+        }
+      }
+
+      _openDatePicker(openDatePicker) {
+        if (openDatePicker === true) {
+          this._showdatePicker();
+        }
+      }
+
+      _createDatePickerDialog() {
+        this.datePicker = document.createElement('etools-datepicker');
+        this.datePicker.prettyDate = this.prettyDate;
+        this.datePicker.jsonDate = this.jsonDate;
+        this.datePicker.format = this.format;
+        this.datePicker.open = this.open;
+        this.datePicker.isDisabled = this.isDisabled;
+        this.datePicker.dynamicallyCreated = true;
+        this.datePicker.noInit = this.noInit;
+        this.datePicker.showClearBtn = this.showClearBtn;
+
+        if (this.date) {
+          this.datePicker.date = this.date;
+        }
+        if (this.minDate) {
+          this.datePicker.minDate = this.minDate;
+        }
+        if (this.maxDate) {
+          this.datePicker.maxDate = this.maxDate;
+        }
+
+        this.datePicker.addEventListener('date-selected', function(event) {
+          this._updateProperties(event.detail);
+        }.bind(this));
+
+        this.datePicker.addEventListener('clear-and-close', function(event) {
+          this._updateProperties(event.detail);
+        }.bind(this));
+
+        this.datePicker.addEventListener('dismiss', function(event) {
+          this.open = false;
+        }.bind(this));
+
+        document.querySelector('body').appendChild(this.datePicker);
+      }
+
+      _updateProperties(detail) {
+        this.set('prettyDate', detail.prettyDate);
+        this.set('jsonDate', detail.jsonDate);
+        this.open = false;
+      }
+
+      _dateHasChanged(prettyDate, jsonDate) {
+        if (prettyDate === 'undefined' && jsonDate === 'undefined') {
+          return;
+        }
+        if (this.fireDateHasChanged) {
+          this._debouncer = Polymer.Debouncer.debounce(
+              this._debouncer,
+              Polymer.Async.timeOut.after(50),
+              () => {
+                this.dispatchEvent(new CustomEvent('date-has-changed', {
+                  detail: {
+                    prettyDate: prettyDate,
+                    jsonDate: jsonDate
+                  }, bubbles: true, composed: true
+                }));
+              });
+        }
+      }
+    }
+
+    customElements.define(EtoolsDatepickerButton.is, EtoolsDatepickerButton);
   </script>
 </dom-module>
