@@ -1,0 +1,45 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="etools-datepicker-styles">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        --primary-text-color: var(--etools-datepicker-primary-color, #333333);
+        --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
+
+        --default-primary-color: var(--etools-datepicker-heading-bg-color, #4a90e2);
+        --text-primary-color: var(--etools-datepicker-heading-date-color, #ffffff);
+        --light-primary-color: var(--etools-datepicker-heading-year-color, #c5cae9);
+
+        --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
+
+        --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .buttons {
+        background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
+      }
+
+      .buttons paper-button {
+        color: var(--etools-datepicker-btns-text-color, #4a90e2);
+        @apply --etools-datepicker-btn;
+      }
+
+      paper-date-picker {
+        --paper-date-picker-heading: {
+          z-index: 1 !important;
+          margin-bottom: -61px;
+        };
+        --paper-date-picker-heading-date: {
+          @apply --layout-vertical;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

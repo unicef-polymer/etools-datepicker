@@ -3,6 +3,8 @@
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="etools-datepicker.html">
 
+<link rel="import" href="mixins/datepicker-common-mixin.html">
+
 <!--
 `etools-datepicker-button`
 
@@ -25,30 +27,28 @@ Custom property | Description | Default
 
 <dom-module id="etools-datepicker-button">
   <template>
-    <custom-style>
-      <style is="custom-style" include="paper-date-picker-dialog-style">
-        :host {
-          display: inline-block;
-        }
+    <style is="custom-style" include="paper-date-picker-dialog-style">
+      :host {
+        display: inline-block;
+      }
 
-        .pick-date {
-          cursor: pointer;
-        }
+      .pick-date {
+        cursor: pointer;
+      }
 
-        iron-icon {
-          --iron-icon: {
-            @apply --etools-datepicker-btn;
-          };
-          --iron-icon-width: var(--etools-datepicker-btn-width, 24px);
-          --iron-icon-height: var(--etools-datepicker-btn-height, 24px);
-        }
+      iron-icon {
+        --iron-icon: {
+          @apply --etools-datepicker-btn;
+        };
+        --iron-icon-width: var(--etools-datepicker-btn-width, 24px);
+        --iron-icon-height: var(--etools-datepicker-btn-height, 24px);
+      }
 
-        .pick-date[disabled] {
-          color: var(--etools-datepicker-btn-disabled-color, #d1d1d1);
-          cursor: not-allowed;
-        }
-      </style>
-    </custom-style>
+      .pick-date[disabled] {
+        color: var(--etools-datepicker-btn-disabled-color, #d1d1d1);
+        cursor: not-allowed;
+      }
+    </style>
     <iron-icon class="pick-date" disabled$="[[isDisabled]]" on-tap="_showdatePicker"
                icon="icons:date-range"></iron-icon>
   </template>
@@ -59,32 +59,19 @@ Custom property | Description | Default
     /**
      * @polymer
      * @customElement
+     * @appliesMixin EtoolsMixins.DatepickerCommon
      */
-    class EtoolsDatepickerButton extends Polymer.Element {
+    class EtoolsDatepickerButton extends EtoolsMixins.DatepickerCommon(Polymer.Element) {
       static get is() {
         return 'etools-datepicker-button';
       }
 
       static get properties() {
         return {
-          prettyDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
           date: {
             type: Date,
             notify: true,
             observer: '_dateChanged'
-          },
-          jsonDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          format: {
-            type: String,
-            value: 'LL'
           },
           open: {
             type: Boolean,
@@ -96,14 +83,6 @@ Custom property | Description | Default
             type: Boolean,
             value: false,
             reflectToAttribute: true
-          },
-          noInit: {
-            type: Boolean,
-            value: false
-          },
-          showClearBtn: {
-            type: Boolean,
-            value: false
           },
           fireDateHasChanged: {
             type: Boolean,
