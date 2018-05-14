@@ -1,0 +1,77 @@
+<script>
+  'use strict';
+
+  window.EtoolsMixins = window.EtoolsMixins || {};
+
+  /*
+   * Datepicker common functionality
+   * @polymer
+   * @mixinFunction
+   */
+  EtoolsMixins.DatepickerCommon = Polymer.dedupingMixin(superClass => class extends superClass {
+    static get properties() {
+      return {
+        prettyDate: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        jsonDate: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        format: {
+          type: String,
+          value: 'LL'
+        },
+        noInit: {
+          type: Boolean,
+          value: false
+        },
+        date: {
+          type: Date,
+          notify: true
+        },
+        minDate: Date,
+        maxDate: Date,
+        showClearBtn: {
+          type: Boolean,
+          value: false
+        }
+      };
+    }
+
+    clearDateSelection() {
+      this.set('date', new Date());
+      this.set('prettyDate', '');
+      this.set('jsonDate', '');
+    }
+
+    initializeDate(initCallback) {
+      setTimeout(() => {
+        if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
+          this.set('date', new Date());
+        }
+        if (!this.noInit && typeof initCallback === 'function') {
+          initCallback.bind(this)();
+        }
+      }, 0);
+    }
+
+    updateFormattedDates(date) {
+      let d = date ? date : this.date;
+      if (!d) {
+        return;
+      }
+      this.set('prettyDate', this._dateFormat(this.date, this.format));
+      this.set('jsonDate', this._dateFormat(this.date, ''));
+    }
+
+    _dateFormat(date, format) {
+      return moment(date).format(format);  // eslint-disable-line
+    }
+
+  });
+
+</script>
