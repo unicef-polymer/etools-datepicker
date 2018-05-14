@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-date-picker/paper-date-picker.html">
 <link rel="import" href="../paper-date-picker/paper-date-picker-dialog-style.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
@@ -8,6 +7,8 @@
 <link rel="import" href="../moment-imports/moment-min.html">
 <link rel="import" href="../neon-animation/web-animations.html">
 
+<link rel="import" href="mixins/datepicker-common-mixin.html">
+<link rel="import" href="styles/etools-datepicker-styles.html">
 
 <!--
 `etools-datepicker`
@@ -33,70 +34,29 @@ Custom property | Description | Default
 `--etools-datepicker-btns-text-color` | Calendar dialog buttons text color  | `#d1d1d1`
 `--etools-datepicker-btn` | Calendar dialog buttons mixin  | `{}`
 
-@customElement
-@demo demo/index.html
 -->
 
 <dom-module id="etools-datepicker">
   <template>
+    <style include="paper-date-picker-dialog-style etools-datepicker-styles">
+      .pick-date {
+        cursor: pointer;
+      }
 
-    <custom-style>
-      <style include="paper-date-picker-dialog-style">
-        :host {
-          display: inline-block;
-          --primary-text-color: var(--etools-datepicker-primary-color, #333333);
-          --secondary-text-color: var(--etools-datepicker-secondary-color, #737373);
+      .pick-date[disabled] {
+        color: var(--etools-datepicker-disabled-color, #d1d1d1);
+        cursor: not-allowed;
+      }
+    </style>
 
-          --default-primary-color: var(--etools-datepicker-heading-bg-color, #4a90e2);
-          --text-primary-color: var(--etools-datepicker-heading-date-color, #ffffff);
-          --light-primary-color: var(--etools-datepicker-heading-year-color, #c5cae9);
-
-          --default-background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
-
-          --text-disabled-color: var(--etools-datepicker-disabled-color, #d1d1d1);
-        }
-
-        [hidden] {
-          display: none !important;
-        }
-
-        .buttons {
-          background-color: var(--etools-datepicker-calendar-bg-color, #ffffff);
-        }
-
-        .buttons paper-button {
-          color: var(--etools-datepicker-btns-text-color, #4a90e2);
-          @apply --etools-datepicker-btn;
-        }
-
-        .pick-date {
-          cursor: pointer;
-        }
-
-        .pick-date[disabled] {
-          color: var(--etools-datepicker-disabled-color, #d1d1d1);
-          cursor: not-allowed;
-        }
-
-        paper-date-picker {
-          --paper-date-picker-heading: {
-            z-index: 1;
-            margin-bottom: -61px;
-          } --paper-date-picker-heading-date: {
-          @apply --layout-vertical;
-        }
-        }
-      </style>
-    </custom-style>
-
-    <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-tap="showDialog"
+    <iron-icon class="pick-date" disabled$="[[isDisabled]]" hidden$="[[dynamicallyCreated]]" on-click="showDialog"
                icon="icons:date-range"></iron-icon>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="{{modal}}" with-backdrop="{{withBackdrop}}"
                   on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" date="[[date]]" min-date="[[minDate]]" max-date="[[maxDate]]"></paper-date-picker>
       <div class="buttons">
-        <paper-button on-tap="_clearSelectedDate" hidden$="[[!showClearBtn]]">Clear</paper-button>
+        <paper-button on-click="_clearSelectedDate" hidden$="[[!showClearBtn]]">Clear</paper-button>
         <paper-button dialog-dismiss>Cancel</paper-button>
         <paper-button dialog-confirm>OK</paper-button>
       </div>
@@ -109,28 +69,16 @@ Custom property | Description | Default
     /**
      * @polymer
      * @customElement
+     * @appliesMixin EtoolsMixins.DatepickerCommon
+     * @demo demo/index.html
      */
-    class EtoolsDatepicker extends Polymer.Element {
+    class EtoolsDatepicker extends EtoolsMixins.DatepickerCommon(Polymer.Element) {
       static get is() {
         return 'etools-datepicker';
       }
 
       static get properties() {
         return {
-          prettyDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          jsonDate: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          format: {
-            type: String,
-            value: 'LL'
-          },
           open: {
             type: Boolean,
             value: false,
@@ -143,24 +91,6 @@ Custom property | Description | Default
             reflectToAttribute: true
           },
           dynamicallyCreated: {
-            type: Boolean,
-            value: false
-          },
-          noInit: {
-            type: Boolean,
-            value: false
-          },
-          date: {
-            type: Date,
-            notify: true
-          },
-          minDate: {
-            type: Date
-          },
-          maxDate: {
-            type: Date
-          },
-          showClearBtn: {
             type: Boolean,
             value: false
           },
@@ -177,14 +107,7 @@ Custom property | Description | Default
 
       ready() {
         super.ready();
-        setTimeout(function() {
-          if (this.date instanceof Date === false || this.date.toString() === 'Invalid Date') {
-            this.set('date', new Date());
-          }
-          if (!this.noInit) {
-            this._updateDate();
-          }
-        }.bind(this), 0);
+        this.initializeDate(this._updateDate);
         // TODO: remove this method after closing issue in paper-date-picker
         // (https://github.com/bendavis78/paper-date-picker/issues/187)
         this._selectedYearFix();
@@ -210,10 +133,6 @@ Custom property | Description | Default
             prettyDate: this.prettyDate, jsonDate: this.jsonDate
           }, bubbles: true, composed: true
         }));
-      }
-
-      _dateFormat(date, format) {
-        return moment(date).format(format);  // eslint-disable-line
       }
 
       showDialog() {
@@ -249,9 +168,7 @@ Custom property | Description | Default
       }
 
       _clearSelectedDate() {
-        this.set('date', new Date());
-        this.set('prettyDate', '');
-        this.set('jsonDate', '');
+        this.clearDateSelection();
         this.$.dialog.cancel();
         this.dispatchEvent(new CustomEvent('clear-and-close', {
           detail: {
