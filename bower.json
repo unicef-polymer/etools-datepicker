@@ -1,7 +1,7 @@
 {
   "name": "etools-datepicker",
   "description": "Polymer datepicker element",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "license": "https://github.com/unicef-polymer/etools-datepicker/blob/master/LICENSE.md",
   "main": "etools-datepicker.html",
   "dependencies": {
