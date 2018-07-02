@@ -95,7 +95,10 @@ Custom property | Description | Default
       }
 
       static get observers() {
-        return ['_dateHasChanged(prettyDate, jsonDate)'];
+        return [
+          '_dateHasChanged(prettyDate, jsonDate)',
+          '_minMaxDateChanged(minDate, maxDate)'
+          ];
       }
 
       connectedCallback() {
@@ -193,6 +196,11 @@ Custom property | Description | Default
                 }));
               });
         }
+      }
+
+      _minMaxDateChanged(minDate, maxDate) {
+        this.datePicker.minDate = minDate;
+        this.datePicker.maxDate = maxDate;
       }
     }
 
