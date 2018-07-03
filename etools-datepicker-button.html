@@ -199,6 +199,9 @@ Custom property | Description | Default
       }
 
       _minMaxDateChanged(minDate, maxDate) {
+        if (!this.datePicker) {
+          return;
+        }
         this.datePicker.minDate = minDate;
         this.datePicker.maxDate = maxDate;
       }
